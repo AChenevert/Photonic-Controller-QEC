@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qec-monitor-surface-code"
+version = "0.1.0"
+description = "Monitor-aware surface-code QEC with photonic control-path information"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.10",
+  "matplotlib>=3.7",
+  "qutip>=5.0",
+  "stim>=1.14",
+  "pymatching>=2.2",
+  "qiskit>=1.0",
+  "networkx>=3.0",
+  "tqdm>=4.9",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
