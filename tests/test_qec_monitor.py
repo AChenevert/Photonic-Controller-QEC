@@ -1,6 +1,12 @@
 import numpy as np
+import pytest
 
-from qec_monitor import MRMMonitorModel, SimulationConfig, run_monitor_experiment
+from qec_monitor import (
+    MRMMonitorModel,
+    SimulationConfig,
+    run_exact_surface_code_experiment,
+    run_monitor_experiment,
+)
 from qec_monitor.decoder import match_and_decode
 
 
@@ -27,3 +33,27 @@ def test_run_monitor_experiment_returns_finite_rates():
     assert np.isfinite(result["baseline_logical_error_rate"])
     assert np.isfinite(result["monitor_aware_logical_error_rate"])
     assert np.isfinite(result["improvement_factor"])
+
+
+def test_exact_surface_code_matches_matlab_reference_results():
+    default = run_exact_surface_code_experiment()
+    stronger_anomaly = run_exact_surface_code_experiment({"p_bad": 0.10})
+
+    assert default["baseline_ler"] == pytest.approx(0.0002113845683, rel=1e-9)
+    assert default["monitor_ler"] == pytest.approx(0.0002099323731, rel=1e-9)
+    assert stronger_anomaly["baseline_ler"] == pytest.approx(0.0006226238870, rel=1e-9)
+    assert stronger_anomaly["monitor_ler"] == pytest.approx(0.0004820882069, rel=1e-9)
+
+
+def test_exact_surface_code_decoder_controls_and_parameter_validation():
+    result = run_exact_surface_code_experiment()
+
+    assert result["perfect_risk_monitor_ler"] <= result["monitor_ler"]
+    assert result["monitor_ler"] <= result["baseline_ler"]
+    assert result["uninformative_monitor_ler"] == pytest.approx(result["baseline_ler"])
+    assert result["shuffled_monitor_ler"] >= result["baseline_ler"]
+    assert result["all_builtin_checks_passed"]
+    with pytest.raises(ValueError, match="unknown parameter"):
+        run_exact_surface_code_experiment({"unknown": 0.1})
+    with pytest.raises(ValueError, match="p_bad"):
+        run_exact_surface_code_experiment({"p_bad": 0.5})

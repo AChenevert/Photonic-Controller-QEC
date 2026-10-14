@@ -15,7 +15,7 @@ This project explores how a monitor port on a photonic control path can improve 
 
 - `src/qec_monitor/monitor.py`: MRM monitor model and signal-estimation utilities.
 - `src/qec_monitor/decoder.py`: monitor-aware weighted decoding graph.
-- `src/qec_monitor/simulator.py`: repetition-code experiment driver.
+- `src/qec_monitor/simulator.py`: exact MATLAB-matched surface-code model, plus repetition-code and Stim experiment drivers.
 
 ## Quick start
 
@@ -32,6 +32,70 @@ python -c "from qec_monitor import MRMMonitorModel, SimulationConfig, run_monito
 3. Map monitor information into dynamic edge weights for a decoder.
 4. Compare baseline, oracle, noisy monitor, and shuffled-monitor conditions.
 5. Study distance-3, 5, and 7 rotated surface codes under drift and burst errors.
+
+## Exact MATLAB-matched experiment
+
+`run_exact_surface_code_experiment()` mirrors the model in the MATLAB guide. It
+uses the nine-qubit distance-3 rotated code, one independent X-error layer,
+perfect checks, and exact probability sums over every error and monitor word.
+The monitor reports noisy channel risk, not realized faults. This is a
+probability-model teaching example; it does not simulate optical hardware,
+noisy syndrome extraction, or repeated rounds.
+
+```python
+from qec_monitor import run_exact_surface_code_experiment
+
+default = run_exact_surface_code_experiment()
+stronger_anomaly = run_exact_surface_code_experiment({"p_bad": 0.10})
+print(default["baseline_ler"], default["monitor_ler"])
+print(stronger_anomaly["baseline_ler"], stronger_anomaly["monitor_ler"])
+```
+
+The existing `run_surface_code_experiment()` remains the separate sampled Stim
+circuit path. Its logical-error score uses Stim observables, not the raw
+measurement-bit average; it is currently syndrome-only and does not consume
+monitor data. `run_monitor_experiment()` remains the repetition-code scaffold.
+
+## Full validation run
+
+Run the tests and save reproducible JSON/CSV results for the MATLAB-matched
+scenarios and an assumed MRR frequency sweep:
+
+```bash
+python scripts/run_validation.py
+```
+
+Use `--output-dir PATH` to choose the report directory, or `--skip-tests` to
+regenerate reports only. The suite exhaustively checks all 512 X-error words
+and both logical recovery choices, the MATLAB reference rates and controls,
+Stim detector/observable handling, and monitor pulse/frequency inputs.
+
+## MRR pulse and frequency inputs
+
+`MRMMonitorModel` accepts a caller-provided sampled `pulse_envelope` and
+`carrier_frequency_hz`. Until device simulations are supplied, it uses explicit
+assumptions: 193.5 THz resonance, 10 GHz linewidth, and 0.12 drop-port coupling
+in a single-pole Lorentzian response. These are placeholders, not hardware
+measurements. Replace the assumed response with a complex transfer curve:
+
+```python
+from qec_monitor import MRMFrequencyResponse, MRMMonitorModel
+
+response = MRMFrequencyResponse(frequencies_hz, complex_drop_port_transfer)
+monitor = MRMMonitorModel(frequency_response=response)
+drop_signal = monitor.drop_port_signal(
+	times,
+	pulse_envelope=sampled_pulse,
+	carrier_frequency_hz=carrier_frequency_hz,
+)
+```
+
+The backend contract (`SurfaceCodeBackend` and `BackendSamples`) normalizes
+detector events, logical-observable flips, and optional per-shot monitor
+observations. Stim implements it now; a Qiskit or hardware adapter can implement
+the same sampling/decoding methods later. Qiskit execution is not yet wired into
+the runner, and the scalar-frequency model does not yet apply a transfer curve
+across a pulse's full optical spectrum.
 
 ## Notes
 
