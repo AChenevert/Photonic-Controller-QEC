@@ -1,0 +1,124 @@
+{
+  "dataset_kind": "synthetic_not_measured",
+  "seed": 20261014,
+  "time_unit": "ns",
+  "optical_power_unit": "uW",
+  "pulses_per_family": 240,
+  "pulse_slot_ns": 20.0,
+  "sample_interval_ns": 0.1,
+  "gaussian_sigma_ns": 2.5,
+  "gaussian_untruncated_fwhm_ns": 5.8870501125773735,
+  "drag_beta_ns": 0.5,
+  "input_I_peak_uW": 120.0,
+  "topology": "input/thru/add/drop; add unexcited",
+  "ring_model": "single-resonance quasi-static temporal coupled-mode power transmission",
+  "reference_plane": "on-chip ring ports before detector",
+  "nominal_field_decay_fractions": {
+    "input_bus": 0.5,
+    "drop_bus": 0.46,
+    "intrinsic": 0.04
+  },
+  "wavelength_nm": 1550.0,
+  "loaded_Q": 15000,
+  "nominal_loaded_linewidth_GHz": 12.894299268817203,
+  "detuning_units": "nominal loaded half-width at half-maximum (HWHM)",
+  "receiver": {
+    "responsivity_A_per_W": 0.1,
+    "bandwidth_Hz": 500000000.0,
+    "time_constant_ns": 0.3183098861837907,
+    "equivalent_noise_bandwidth_Hz": 785398163.3974483,
+    "electronics_noise_rms_uW": 0.12,
+    "quantization_step_uW": 0.009155832265152902,
+    "channel_calibration": {
+      "input_I": {
+        "offset_uW": 0.0,
+        "gain": 1.0
+      },
+      "thru_I": {
+        "offset_uW": 0.06,
+        "gain": 1.004
+      },
+      "drop_I": {
+        "offset_uW": 0.08,
+        "gain": 0.995
+      },
+      "input_Q_abs": {
+        "offset_uW": 0.0,
+        "gain": 1.0
+      },
+      "thru_Q_abs": {
+        "offset_uW": 0.04,
+        "gain": 1.006
+      },
+      "drop_Q_abs": {
+        "offset_uW": 0.07,
+        "gain": 0.993
+      }
+    },
+    "model": "continuous single-pole signal response and correlated variance-equivalent shot+electronics noise, small gain/offset/drift, 14-bit-equivalent quantization"
+  },
+  "numpy_version": "1.19.2",
+  "perfect_definition": "noise-free, nominal ring, intended input, no detector bandwidth limitation",
+  "drag_encoding": "two separate four-port ring lanes; Q magnitude is nonnegative optical power, signed electrical Q uses an independent polarity/LO phase command",
+  "quantum_scope": "No qubit error probabilities, syndromes, Pauli labels, gate fidelity, or QEC benefit are simulated.",
+  "sources": [
+    {
+      "title": "Dasic, Comparison of Transfer Matrix and Coupling of Modes in Time Models of Coupled Microring Resonator Filters, INFOTEH 2013",
+      "url": "https://infoteh.etf.ues.rs.ba/zbornik/2013/radovi/STS/STS-17.pdf"
+    },
+    {
+      "title": "Motzoi et al., Simple Pulses for Elimination of Leakage in Weakly Nonlinear Qubits, PRL 103 110501 (2009)",
+      "url": "https://doi.org/10.1103/PhysRevLett.103.110501"
+    }
+  ],
+  "validation": {
+    "gaussian": {
+      "rows": 48000,
+      "columns": 22,
+      "pulses": 240,
+      "samples_per_pulse": 200,
+      "max_optical_balance_residual_uW": 3.552713678800501e-14,
+      "positive_physical_power": true,
+      "no_nan_or_inf": true,
+      "uniform_time_step_ns": 0.1,
+      "fault_counts": {
+        "combined_fault": 16,
+        "downstream_LO_phase_error": 16,
+        "drop_detector_clipping": 16,
+        "extra_ring_loss": 16,
+        "input_power_dip": 16,
+        "near_missing_input_pulse": 8,
+        "nominal": 64,
+        "pulse_width_error": 16,
+        "resonance_drift": 24,
+        "slow_bias_settling": 16,
+        "timing_jitter": 16,
+        "wrong_bias": 16
+      }
+    },
+    "drag": {
+      "rows": 48000,
+      "columns": 22,
+      "pulses": 240,
+      "samples_per_pulse": 200,
+      "max_optical_balance_residual_uW": 4.085620730620576e-14,
+      "positive_physical_power": true,
+      "no_nan_or_inf": true,
+      "uniform_time_step_ns": 0.1,
+      "fault_counts": {
+        "Q_gain_imbalance": 16,
+        "combined_fault": 16,
+        "downstream_LO_phase_error": 16,
+        "drop_detector_clipping": 16,
+        "extra_ring_loss": 16,
+        "input_power_dip": 16,
+        "near_missing_input_pulse": 8,
+        "nominal": 64,
+        "resonance_drift": 24,
+        "slow_bias_settling": 16,
+        "timing_jitter": 16,
+        "wrong_bias": 16
+      }
+    }
+  }
+}

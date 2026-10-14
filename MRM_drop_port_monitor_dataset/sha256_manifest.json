@@ -1,0 +1,10 @@
+{
+  "README.txt": "b0d195f940d53a0ad17854494e4f65cc813b857ca029ccf012cd976406e939dc",
+  "drag_instructor_truth.csv": "27d83d651bfcd3889278c30d0ead2f4cbce4a5acb4cea4035a16e20e2e6b0da0",
+  "drag_train.csv": "e9ddf48cca047d97f43155a242469532da71ab854c6fbca818e68bb508ceca13",
+  "gaussian_instructor_truth.csv": "2a55ed2c228b080e0f4eb1400108eae03227cff691b74f1bcaec6a18adf77d7b",
+  "gaussian_train.csv": "b630861e02cbc0f2443d02702c18302c57f37d523a0f7851010ac510d9d5c518",
+  "parameters_and_validation.json": "392b7ad4e2bf68022e911f530ac3bee14f137d6ae79b6f91da8cca0d33645d03",
+  "pulse_labels_INSTRUCTOR.csv": "12a3df2e7d14a2fea815b9b1642445913ff8b2d812afeb264e90c626097eed64",
+  "waveform_preview.png": "9050e125e4b5e18189640f9ca2aa52799263d7779cfdad32fa30169e278eaee6"
+}
